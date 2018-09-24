@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+host=$1
+while ! nc -z $host ssh; do sleep 5; done
+
+path=$(nix-build --no-out-link ./machine.nix) || exit 1
+nix-deploy system --noSign --to root@${host} --path $path
